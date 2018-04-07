@@ -285,6 +285,16 @@ int main(void)
 {
     tree_t tree;
 
+    /*
+     *               50
+     *       ________|________
+     *      /                 \
+     *     10__               60__
+     *         \                  \
+     *         25                 92
+     *        /  \               /
+     *       15  30             67
+     */
     create_root(&tree,        50);
     insert(tree.t, &tree.off, 10);
     insert(tree.t, &tree.off, 60);
