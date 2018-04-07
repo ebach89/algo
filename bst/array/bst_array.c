@@ -196,6 +196,22 @@ int max_depth(bst_t *t, int i)
 }
 
 /**
+ * Returns index of node with min value in subtree,
+ * denoted by inpit 'i' param.
+ *
+ * t - root of tree's array
+ */
+int min_in_sub_tree(bst_t *t, int i)
+{
+    int cur = i;
+
+    while (t[cur].li != -1) {
+        cur = t[cur].li;
+    }
+    return cur;
+}
+
+/**
  * in-order traversal
  */
 void in_trav(bst_t *t, int i)
@@ -307,5 +323,18 @@ int main(void)
     PRINT_FIND(find_r(tree.t, 0, 50), tree.t);
     PRINT_FIND(find_r(tree.t, 0, 5555), tree.t);
     PRINT_FIND(find_r(tree.t, 0, -55), tree.t);
+
+    printf("\nFind minimum in subtrees by choosing differrent root nodes\n");
+    bst_t *root = tree.t;
+    int sub_idx = root[0].ri;
+    int min_idx = min_in_sub_tree(root, sub_idx);
+    printf("Min in right sub-tree of root(%d): %d\n", root[0].d, root[min_idx].d);
+
+    sub_idx = root[0].li;
+    min_idx = min_in_sub_tree(root, sub_idx);
+    printf("Min in left sub-tree of root(%d): %d\n", root[0].d, root[min_idx].d);
+
+    min_idx = min_in_sub_tree(root, 0);
+    printf("Min in overall tree with root(%d): %d\n", root[0].d, root[min_idx].d);
     return 0;
 }
