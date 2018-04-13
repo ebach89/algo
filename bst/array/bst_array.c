@@ -4,6 +4,7 @@
 #define MIN_INT     (-MAX_INT - 1)
 
 #define MAX(a, b)   (a) > (b) ? (a) : (b)
+#define ARRAY_SIZE(a)   (sizeof(a)/sizeof(a[0]))
 
 #define PRINT_FIND(expr, array)                             \
     do {                                                    \
@@ -221,6 +222,21 @@ int max_in_sub_tree(bst_t *t, int i)
     return cur;
 }
 
+void tree_sort(bst_t *t, int i, int *sorted)
+{
+    static int cnt;
+
+    if (t[i].li != -1) {
+        tree_sort(t, t[i].li, sorted);
+    }
+
+    sorted[cnt++] = t[i].d;
+
+    if (t[i].ri != -1) {
+        tree_sort(t, t[i].ri, sorted);
+    }
+}
+
 /**
  * in-order traversal
  */
@@ -364,5 +380,12 @@ int main(void)
     printf("Overall tree with root(%d), min:%d, max:%d\n",
            root[0].d, root[min_idx].d, root[max_idx].d);
 
+    printf("\nTree Sort (just in order traverse)\n");
+    int sorted[16] = {0};
+    tree_sort(tree.t, 0, sorted);
+    for (int i = 0; i < ARRAY_SIZE(sorted); ++i) {
+        printf("%d ", sorted[i]);
+    }
+    printf("\n");
     return 0;
 }
