@@ -222,6 +222,40 @@ int max_in_sub_tree(bst_t *t, int i)
     return cur;
 }
 
+int del(bst_t *t, int i, int v)
+{
+    if (v < t[i].d && t[i].li != -1) {
+        t[i].li = del(t, t[i].li, v);
+    } else if (v > t[i].d && t[i].ri != -1) {
+        t[i].ri = del(t, t[i].ri, v);
+    } else if (t[i].d == v) {
+        if (t[i].li == -1 && t[i].ri == -1) {
+            /* Current node 'i' is the leaf,
+             * by returning with -1, node 'i' is removed,
+             * because parent::ri or li will be -1  */
+            return -1;
+        }
+
+        /* Node with only one child */
+        if (t[i].ri == -1) {
+            return t[i].li;
+        } else if (t[i].li == -1) {
+            return t[i].ri;
+        } else {
+            /* two children */
+            /* Replace current node data with
+             * inorder predecessor (i.e. the max in left subtree) */
+            int max_idx = max_in_sub_tree(t, t[i].li);
+            t[i].d = t[max_idx].d;
+
+            /* Remove inorder predecessor */
+            t[i].li = del(t, t[i].li, t[max_idx].d);
+        }
+    }
+
+    return i;
+}
+
 void tree_sort(bst_t *t, int i, int *sorted)
 {
     static int cnt;
@@ -387,5 +421,24 @@ int main(void)
         printf("%d ", sorted[i]);
     }
     printf("\n");
+
+    printf("\nRemove root of tree: %d\n", tree.t[0].d);
+    del(tree.t, 0, tree.t[0].d);
+    in_trav(tree.t, 0);
+    printf("Remove 10\n");
+    del(tree.t, 0, 10);
+    in_trav(tree.t, 0);
+    printf("Remove 60\n");
+    del(tree.t, 0, 60);
+    in_trav(tree.t, 0);
+    printf("\tRemove unexisting data 42\n");
+    del(tree.t, 0, 42);
+    in_trav(tree.t, 0);
+    printf("\tRemove unexisting data 42\n");
+    del(tree.t, 0, 42);
+    in_trav(tree.t, 0);
+    printf("\tRemove unexisting data -1\n");
+    del(tree.t, 0, -1);
+    in_trav(tree.t, 0);
     return 0;
 }
