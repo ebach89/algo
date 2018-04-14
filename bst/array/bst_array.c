@@ -296,6 +296,7 @@ void in_trav(bst_t *t, int i)
 
     if (once_after) {
         printf("\n");
+        once = once_after = 0;
     }
 }
 
